@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversor
+  labels:
+    app: conversor
+spec:
+  selector:
+    matchLabels:
+      app: conversor
+  replicas: 3 
+  template:
+    metadata:
+      labels:
+        app: conversor
+    spec:
+      containers:
+      - name: conversor
+        image: mahzze/conversao-temperatura:v1
+        ports:
+        - containerPort:  8080
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myjob
+spec:
+  selector:
+    app: myjob
+  type: NodePort
+  ports:
+  - name: myjob
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+    nodePort: 30000
